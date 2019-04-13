@@ -2,17 +2,13 @@ package com.softserve.academy.servlets;
 
 import com.softserve.academy.dao.ExhibitDao;
 import com.softserve.academy.dao.impl.ExhibitDaoImpl;
-import com.softserve.academy.dao.impl.GuideDaoImpl;
 import com.softserve.academy.entity.ExhibitEntity;
-import com.softserve.academy.entity.GuideEntity;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class AddExhibitServlet extends HttpServlet {
 
@@ -39,17 +35,16 @@ public class AddExhibitServlet extends HttpServlet {
         exhibitEntity.setMaterial_name(material);
         exhibitEntity.setTechnique_name(technique);
         exhibitEntity.setHall_name(hall);
-        if (!exhibitName.equals("")&&!firstname.equals("")
-                &&!lastname.equals("")&&!hall.equals("")
-                &&!material.equals("")&&!technique.equals("")
-                &&exhibitDao.saveExhibit(exhibitEntity)) {
+        if (!exhibitName.equals("") && !firstname.equals("")
+                && !lastname.equals("") && !hall.equals("")
+                && !material.equals("") && !technique.equals("")
+                && exhibitDao.saveExhibit(exhibitEntity)) {
             req.setAttribute("success", 1);
             System.out.println("Success = 1");
         } else {
             System.out.println("Success = 0");
             req.setAttribute("success", 0);
         }
-
         doGet(req, resp);
     }
 }

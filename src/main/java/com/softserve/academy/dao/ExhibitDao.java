@@ -9,6 +9,8 @@ public interface ExhibitDao {
 
     List<ExhibitEntity> readAllExhibits();
 
+    ExhibitEntity getExhibitById(int id);
+
     int updateExhibit(ExhibitEntity exhibit);
 
     int deleteExhibit(int id_exhibit);

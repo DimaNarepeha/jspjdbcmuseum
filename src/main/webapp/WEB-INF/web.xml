@@ -72,6 +72,16 @@
 
     <!-- update exhibit servlet -->
     <servlet>
+        <servlet-name>updateExhibitList</servlet-name>
+        <servlet-class>com.softserve.academy.servlets.UpdateExhibitListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>updateExhibitList</servlet-name>
+        <url-pattern>/updateExhibitList</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>updateExhibit</servlet-name>
         <servlet-class>com.softserve.academy.servlets.UpdateExhibitServlet</servlet-class>
     </servlet>
@@ -80,6 +90,7 @@
         <servlet-name>updateExhibit</servlet-name>
         <url-pattern>/updateExhibit</url-pattern>
     </servlet-mapping>
+
 
     <!-- update guide servlet -->
     <servlet>

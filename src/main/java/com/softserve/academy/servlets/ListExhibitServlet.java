@@ -16,7 +16,5 @@ public class ListExhibitServlet extends HttpServlet {
         ExhibitDao exhibitDao=new ExhibitDaoImpl();
         req.setAttribute("exhibits",exhibitDao.readAllExhibits());
         req.getRequestDispatcher("listExhibit.jsp").forward(req,resp);
-
-
     }
 }

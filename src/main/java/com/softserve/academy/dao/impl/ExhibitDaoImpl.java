@@ -12,15 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExhibitDaoImpl implements ExhibitDao {
-    @Override
-    public boolean saveExhibit(ExhibitEntity exhibit) {
-        try (PreparedStatement insertToExhibit = Database.getInstance()
+    private void checkAndAddWhatIsNotInDatabase(ExhibitEntity exhibit) {
+        try (PreparedStatement checkAuthor = Database.getInstance()
                 .getConnection()
-                .prepareStatement("INSERT INTO exhibit(id_material,id_technique,id_hall,exhibit_name)" +
-                        "VALUES(?,?,?,?)");
-             PreparedStatement checkAuthor = Database.getInstance()
-                     .getConnection()
-                     .prepareStatement("SELECT id_author FROM author WHERE FIRSTNAME=? AND LASTNAME=?");
+                .prepareStatement("SELECT id_author FROM author WHERE FIRSTNAME=? AND LASTNAME=?");
              PreparedStatement addAuthor = Database.getInstance()
                      .getConnection()
                      .prepareStatement("INSERT INTO author(FIRSTNAME,LASTNAME)" +
@@ -45,14 +40,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
              PreparedStatement addTechnique = Database.getInstance()
                      .getConnection()
                      .prepareStatement("INSERT INTO technique(technique_name)" +
-                             "VALUES(?)");
-             PreparedStatement insertToAuthor_Exhibit = Database.getInstance()
-                     .getConnection()
-                     .prepareStatement("INSERT INTO author_exhibit(id_exhibit,id_author)" +
-                             "VALUES(?,?)");
-             PreparedStatement selectFromExhibitLast = Database.getInstance()
-                     .getConnection()
-                     .prepareStatement("SELECT id_exhibit FROM exhibit ORDER BY id_exhibit DESC LIMIT 1 ")) {
+                             "VALUES(?)")) {
             /**check all and add all elements that are not in database*/
             checkAuthor.setString(1, exhibit.getFirstName());
             checkAuthor.setString(2, exhibit.getLastName());
@@ -63,9 +51,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
                 addAuthor.execute();
             }
             resultSet.close();
-            resultSet = checkAuthor.executeQuery();
-            resultSet.first();
-            int authorId = resultSet.getInt(1);
+
 
             checkHall.setString(1, exhibit.getHall_name());
             resultSet = checkHall.executeQuery();
@@ -74,9 +60,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
                 addHall.execute();
             }
             resultSet.close();
-            resultSet = checkHall.executeQuery();
-            resultSet.first();
-            int hallId = resultSet.getInt(1);
+
 
             checkMaterial.setString(1, exhibit.getMaterial_name());
             resultSet = checkMaterial.executeQuery();
@@ -85,9 +69,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
                 addMaterial.execute();
             }
             resultSet.close();
-            resultSet = checkMaterial.executeQuery();
-            resultSet.first();
-            int materialId = resultSet.getInt(1);
+
 
             checkTechnique.setString(1, exhibit.getTechnique_name());
             resultSet = checkTechnique.executeQuery();
@@ -96,6 +78,63 @@ public class ExhibitDaoImpl implements ExhibitDao {
                 addTechnique.execute();
             }
             resultSet.close();
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean saveExhibit(ExhibitEntity exhibit) {
+        try (PreparedStatement insertToExhibit = Database.getInstance()
+                .getConnection()
+                .prepareStatement("INSERT INTO exhibit(id_material,id_technique,id_hall,exhibit_name)" +
+                        "VALUES(?,?,?,?)");
+             PreparedStatement checkAuthor = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_author FROM author WHERE FIRSTNAME=? AND LASTNAME=?");
+             PreparedStatement checkMaterial = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_material FROM material WHERE material_name=?");
+             PreparedStatement checkHall = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_hall FROM hall WHERE hall_name=?");
+             PreparedStatement checkTechnique = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_technique FROM technique WHERE technique_name=?");
+             PreparedStatement insertToAuthor_Exhibit = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("INSERT INTO author_exhibit(id_exhibit,id_author)" +
+                             "VALUES(?,?)");
+             PreparedStatement selectFromExhibitLast = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_exhibit FROM exhibit ORDER BY id_exhibit DESC LIMIT 1 ")) {
+            checkAndAddWhatIsNotInDatabase(exhibit);
+            /**check all and add all elements that are not in database*/
+            checkAuthor.setString(1, exhibit.getFirstName());
+            checkAuthor.setString(2, exhibit.getLastName());
+            ResultSet resultSet = checkAuthor.executeQuery();
+            resultSet.first();
+            int authorId = resultSet.getInt(1);
+
+            checkHall.setString(1, exhibit.getHall_name());
+
+            resultSet.close();
+            resultSet = checkHall.executeQuery();
+            resultSet.first();
+            int hallId = resultSet.getInt(1);
+
+            checkMaterial.setString(1, exhibit.getMaterial_name());
+
+            resultSet.close();
+            resultSet = checkMaterial.executeQuery();
+            resultSet.first();
+            int materialId = resultSet.getInt(1);
+
+            checkTechnique.setString(1, exhibit.getTechnique_name());
+
             resultSet = checkTechnique.executeQuery();
             resultSet.first();
             int techniqueId = resultSet.getInt(1);
@@ -157,8 +196,102 @@ public class ExhibitDaoImpl implements ExhibitDao {
     }
 
     @Override
+    public ExhibitEntity getExhibitById(int id) {
+        ExhibitEntity result;
+        try (PreparedStatement selectFromExhibit = Database.getInstance()
+                .getConnection()
+                .prepareStatement("SELECT exhibit.id_exhibit,exhibit_name, hall_name, FIRSTNAME, LASTNAME, material_name, technique_name FROM exhibit\n" +
+                        "INNER JOIN hall ON hall.id_hall=exhibit.id_hall\n" +
+                        "INNER JOIN material ON material.id_material=exhibit.id_material\n" +
+                        "INNER JOIN technique ON technique.id_technique=exhibit.id_technique\n" +
+                        "INNER JOIN author_exhibit ON author_exhibit.id_exhibit=exhibit.id_exhibit\n" +
+                        "INNER JOIN author ON author.id_author=author_exhibit.id_author " +
+                        "WHERE exhibit.id_exhibit=?;")) {
+            selectFromExhibit.setInt(1, id);
+            ResultSet resultSet = selectFromExhibit.executeQuery();
+            resultSet.first();
+            result = new ExhibitEntity(resultSet.getInt(1));
+            result.setExhibit_name(resultSet.getString(2));
+            result.setHall_name(resultSet.getString(3));
+            result.setFirstName(resultSet.getString(4));
+            result.setLastName(resultSet.getString(5));
+            result.setMaterial_name(resultSet.getString(6));
+            result.setTechnique_name(resultSet.getString(7));
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return result;
+    }
+
+    @Override
     public int updateExhibit(ExhibitEntity exhibit) {
-        return 0;
+        int result = 0;
+        try (PreparedStatement updateExhibit = Database.getInstance()
+                .getConnection()
+                .prepareStatement("UPDATE exhibit SET id_material=?,id_technique=?,id_hall=?,exhibit_name=? " +
+                        "WHERE id_exhibit = ?");
+             PreparedStatement checkAuthor = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_author FROM author WHERE FIRSTNAME=? AND LASTNAME=?");
+             PreparedStatement checkMaterial = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_material FROM material WHERE material_name=?");
+             PreparedStatement checkHall = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_hall FROM hall WHERE hall_name=?");
+             PreparedStatement checkTechnique = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("SELECT id_technique FROM technique WHERE technique_name=?");
+             PreparedStatement updateAuthor_Exhibit = Database.getInstance()
+                     .getConnection()
+                     .prepareStatement("UPDATE author_exhibit SET id_author=? " +
+                             "WHERE id_exhibit=?")) {
+            checkAndAddWhatIsNotInDatabase(exhibit);
+            /**check all and add all elements that are not in database*/
+            checkAuthor.setString(1, exhibit.getFirstName());
+            checkAuthor.setString(2, exhibit.getLastName());
+            ResultSet resultSet = checkAuthor.executeQuery();
+            resultSet.first();
+            int newAuthorId = resultSet.getInt(1);
+
+            checkHall.setString(1, exhibit.getHall_name());
+            resultSet.close();
+            resultSet = checkHall.executeQuery();
+            resultSet.first();
+            int newHallId = resultSet.getInt(1);
+
+            checkMaterial.setString(1, exhibit.getMaterial_name());
+            resultSet.close();
+            resultSet = checkMaterial.executeQuery();
+            resultSet.first();
+            int newMaterialId = resultSet.getInt(1);
+
+            checkTechnique.setString(1, exhibit.getTechnique_name());
+            resultSet = checkTechnique.executeQuery();
+            resultSet.first();
+            int newTechniqueId = resultSet.getInt(1);
+            resultSet.close();
+
+            String exhibitName = exhibit.getExhibit_name();
+            updateExhibit.setInt(1, newMaterialId);
+            updateExhibit.setInt(2, newTechniqueId);
+            updateExhibit.setInt(3, newHallId);
+            updateExhibit.setString(4, exhibitName);
+            updateExhibit.setInt(5, exhibit.getId_exhibit());
+            result = updateExhibit.executeUpdate();
+            updateAuthor_Exhibit.setInt(1, exhibit.getId_exhibit());
+            updateAuthor_Exhibit.setInt(2, newAuthorId);
+            updateAuthor_Exhibit.execute();
+            return result;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return result;
+        }
     }
 
     @Override
