@@ -23,9 +23,11 @@ public class DeleteExhibitServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
         int amountOfDeleted = 0;
-        String[] parametersToDelete = req.getParameterValues("toDelete");
-        for (String str : parametersToDelete) {
-            amountOfDeleted += exhibitDao.deleteExhibit(Integer.parseInt(str));
+        if (req.getParameter("toDelete") != null) {
+            String[] parametersToDelete = req.getParameterValues("toDelete");
+            for (String str : parametersToDelete) {
+                amountOfDeleted += exhibitDao.deleteExhibit(Integer.parseInt(str));
+            }
         }
         req.setAttribute("deleted", amountOfDeleted);
         doGet(req, resp);

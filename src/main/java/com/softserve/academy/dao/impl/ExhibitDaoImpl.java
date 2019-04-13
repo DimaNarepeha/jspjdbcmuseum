@@ -64,7 +64,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
         } catch (NumberFormatException e) {
             System.out.println("Maybe you have entered letters or space somewhere");
         } catch (SQLException e) {
-            System.out.println("Database fail");
+            e.printStackTrace();
         }
         return 0;
     }
