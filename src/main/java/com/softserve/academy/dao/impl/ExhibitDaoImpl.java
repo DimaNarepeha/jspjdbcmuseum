@@ -18,7 +18,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
 
     @Override
     public List<ExhibitEntity> readAllExhibits() {
-        List<ExhibitEntity> result=new ArrayList<>();
+        List<ExhibitEntity> result = new ArrayList<>();
         try (PreparedStatement selectFromExhibit = Database.getInstance()
                 .getConnection()
                 .prepareStatement("SELECT exhibit.id_exhibit,exhibit_name, hall_name, FIRSTNAME, LASTNAME, material_name, technique_name FROM exhibit\n" +
@@ -30,7 +30,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
             ResultSet resultSet = selectFromExhibit.executeQuery();
 
             while (resultSet.next()) {
-                ExhibitEntity exhibitEntity=new ExhibitEntity(resultSet.getInt(1));
+                ExhibitEntity exhibitEntity = new ExhibitEntity(resultSet.getInt(1));
                 exhibitEntity.setExhibit_name(resultSet.getString(2));
                 exhibitEntity.setHall_name(resultSet.getString(3));
                 exhibitEntity.setFirstName(resultSet.getString(4));

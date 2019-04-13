@@ -4,4 +4,47 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <!-- add servlet -->
+  <servlet>
+    <servlet-name>add</servlet-name>
+    <servlet-class>com.softserve.academy.servlets.AddServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>add</servlet-name>
+    <url-pattern>/add</url-pattern>
+  </servlet-mapping>
+
+  <!-- list servlet -->
+  <servlet>
+    <servlet-name>list</servlet-name>
+    <servlet-class>com.softserve.academy.servlets.ListServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>list</servlet-name>
+    <url-pattern>/list</url-pattern>
+  </servlet-mapping>
+
+  <!-- delete servlet -->
+  <servlet>
+    <servlet-name>delete</servlet-name>
+    <servlet-class>com.softserve.academy.servlets.DeleteServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>delete</servlet-name>
+    <url-pattern>/delete</url-pattern>
+  </servlet-mapping>
+
+  <!-- delete servlet -->
+  <servlet>
+    <servlet-name>update</servlet-name>
+    <servlet-class>com.softserve.academy.servlets.UpdateServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>update</servlet-name>
+    <url-pattern>/update</url-pattern>
+  </servlet-mapping>
 </web-app>
