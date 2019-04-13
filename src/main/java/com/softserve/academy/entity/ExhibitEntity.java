@@ -9,7 +9,7 @@ public class ExhibitEntity {
     private String material_name;
     private String technique_name;
 
-    ExhibitEntity(Integer id_exhibit) {
+    public ExhibitEntity(Integer id_exhibit) {
         this.id_exhibit = id_exhibit;
     }
 
