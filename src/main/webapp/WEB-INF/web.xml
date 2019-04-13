@@ -4,6 +4,17 @@
 
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
+    <!-- add exhibit servlet -->
+    <servlet>
+        <servlet-name>addExhibit</servlet-name>
+        <servlet-class>com.softserve.academy.servlets.AddExhibitServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addExhibit</servlet-name>
+        <url-pattern>/addExhibit</url-pattern>
+    </servlet-mapping>
+
     <!-- add guide servlet -->
     <servlet>
         <servlet-name>add</servlet-name>
@@ -29,12 +40,23 @@
     <!-- list exhibit servlet -->
     <servlet>
         <servlet-name>listExhibit</servlet-name>
-        <servlet-class>com.softserve.academy.servlets.ExhibitListServlet</servlet-class>
+        <servlet-class>com.softserve.academy.servlets.ListExhibitServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>listExhibit</servlet-name>
         <url-pattern>/listExhibit</url-pattern>
+    </servlet-mapping>
+
+    <!-- delete exhibit servlet -->
+    <servlet>
+        <servlet-name>deleteExhibit</servlet-name>
+        <servlet-class>com.softserve.academy.servlets.DeleteExhibitServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>deleteExhibit</servlet-name>
+        <url-pattern>/deleteExhibit</url-pattern>
     </servlet-mapping>
 
     <!-- delete guide servlet -->
@@ -46,6 +68,17 @@
     <servlet-mapping>
         <servlet-name>delete</servlet-name>
         <url-pattern>/delete</url-pattern>
+    </servlet-mapping>
+
+    <!-- update exhibit servlet -->
+    <servlet>
+        <servlet-name>updateExhibit</servlet-name>
+        <servlet-class>com.softserve.academy.servlets.UpdateExhibitServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>updateExhibit</servlet-name>
+        <url-pattern>/updateExhibit</url-pattern>
     </servlet-mapping>
 
     <!-- update guide servlet -->

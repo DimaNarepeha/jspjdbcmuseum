@@ -4,6 +4,7 @@ import com.softserve.academy.dao.ExhibitDao;
 import com.softserve.academy.db.Database;
 import com.softserve.academy.entity.ExhibitEntity;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -53,6 +54,18 @@ public class ExhibitDaoImpl implements ExhibitDao {
 
     @Override
     public int deleteExhibit(int id_exhibit) {
+        try (PreparedStatement deleteExhibit = Database.getInstance().getConnection().prepareStatement("DELETE FROM exhibit WHERE id_exhibit = ?");
+             PreparedStatement delete_author_exhibit = Database.getInstance().getConnection().prepareStatement("DELETE FROM author_exhibit WHERE id_exhibit = ?")) {
+            deleteExhibit.setInt(1, id_exhibit);
+            delete_author_exhibit.setInt(1, id_exhibit);
+            delete_author_exhibit.execute();
+            int rowsAffected = deleteExhibit.executeUpdate();
+            return rowsAffected;
+        } catch (NumberFormatException e) {
+            System.out.println("Maybe you have entered letters or space somewhere");
+        } catch (SQLException e) {
+            System.out.println("Database fail");
+        }
         return 0;
     }
 }
