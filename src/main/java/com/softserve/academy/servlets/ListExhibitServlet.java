@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ListExhibitServlet extends HttpServlet {
     /**
-     * this method just return the page
+     * this method just returns the page
      * where all exhibits are listed.
      * @param req
      * @param resp

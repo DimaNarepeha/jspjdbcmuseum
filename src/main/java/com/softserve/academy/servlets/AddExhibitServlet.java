@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class AddExhibitServlet extends HttpServlet {
     /**
-     * this method return the start page
+     * this method returns the start page
      * for addExhibit.
      *
      * @param req
