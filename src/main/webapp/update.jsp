@@ -31,6 +31,21 @@
                 "   <h5>There are no users yet!</h5>\n" +
                 "</div>");
     %>
+    <%
+        if (request.getAttribute("result")!=null&&request.getAttribute("result").equals(1)) {
+            out.println("<div class=\"w3-panel w3-green w3-display-container w3-card-4 w3-round\">\n" +
+                    "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
+                    "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-green w3-border w3-border-green w3-hover-border-grey\">=)</span>\n" +
+                    "   <h5>User  updated!</h5>\n" +
+                    "</div>");
+        }
+        else if(request.getAttribute("result")!=null&&request.getAttribute("result").equals(0)) out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
+                +
+                "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
+                "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-red w3-border w3-border-red w3-hover-border-grey\">=)</span>\n" +
+                "   <h5>Nothing was updated!</h5>\n" +
+                "</div>");
+    %>
     <div class="w3-card-4">
         <div class="w3-container w3-center w3-green">
             <h2>Update guide</h2>
@@ -48,22 +63,8 @@
             <button  class="w3-btn w3-green w3-round-large w3-margin-bottom"  >Submit</button>
         </form>
     </div>
+
 </div>
-<%
-    if (request.getAttribute("result")!=null&&request.getAttribute("result").equals(1)) {
-        out.println("<div class=\"w3-panel w3-green w3-display-container w3-card-4 w3-round\">\n" +
-                "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
-                "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-green w3-border w3-border-green w3-hover-border-grey\">=)</span>\n" +
-                "   <h5>User  updated!</h5>\n" +
-                "</div>");
-    }
-    else if(request.getAttribute("result")!=null&&request.getAttribute("result").equals(0)) out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
-            +
-            "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
-            "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-red w3-border w3-border-red w3-hover-border-grey\">=)</span>\n" +
-            "   <h5>Nothing was updated!</h5>\n" +
-            "</div>");
-%>
 <div class="w3-container w3-grey w3-opacity w3-right-align w3-padding">
     <button class="w3-btn w3-round-large" onclick="location.href='/'">Back to main</button>
 </div>

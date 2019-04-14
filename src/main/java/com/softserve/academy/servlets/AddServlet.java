@@ -19,12 +19,19 @@ public class AddServlet extends HttpServlet {
         //writer.println("Method GET from AddServlet");
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("add.jsp");
         requestDispatcher.forward(req, resp);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = req.getParameter("firstname");
         String password = req.getParameter("lastname");
+        if(name.equals("")||password.equals("")){
+            int result =0;
+            req.setAttribute("result", result);
+            doGet(req, resp);
+            return;
+        }
         GuideEntity guide = new GuideEntity(name, password);
       GuideDaoImpl model = new GuideDaoImpl();
         model.saveGuide(guide);
