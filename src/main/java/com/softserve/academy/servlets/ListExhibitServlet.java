@@ -10,6 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ListExhibitServlet extends HttpServlet {
+    /**
+     * this method just return the page
+     * where all exhibits are listed.
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
