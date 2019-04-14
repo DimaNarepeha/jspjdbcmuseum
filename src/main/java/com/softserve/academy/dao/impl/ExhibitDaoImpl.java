@@ -1,18 +1,32 @@
+/*
+ *Open source project 2019
+ *
+ */
 package com.softserve.academy.dao.impl;
 
 import com.softserve.academy.dao.ExhibitDao;
 import com.softserve.academy.db.Database;
 import com.softserve.academy.entity.ExhibitEntity;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * this class represents dao
+ *
+ * @author Dmytro Narepekha
+ */
 public class ExhibitDaoImpl implements ExhibitDao {
-    private void checkAndAddWhatIsNotInDatabase(ExhibitEntity exhibit) {
+    /**
+     * This method add all corresponding objects that are not in database yet
+     * and that are needed to be add for exhibit.
+     *
+     * @param exhibit object to check links for
+     */
+    private void checkAndAddWhatIsNotInDatabase(final ExhibitEntity exhibit) {
         try (PreparedStatement checkAuthor = Database.getInstance()
                 .getConnection()
                 .prepareStatement("SELECT id_author FROM author WHERE FIRSTNAME=? AND LASTNAME=?");
@@ -45,7 +59,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
             checkAuthor.setString(1, exhibit.getFirstName());
             checkAuthor.setString(2, exhibit.getLastName());
             ResultSet resultSet = checkAuthor.executeQuery();
-            if (!resultSet.first()) {//then add
+            if (!resultSet.first()) { //then add
                 addAuthor.setString(1, exhibit.getFirstName());
                 addAuthor.setString(2, exhibit.getLastName());
                 addAuthor.execute();
@@ -55,7 +69,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
 
             checkHall.setString(1, exhibit.getHall_name());
             resultSet = checkHall.executeQuery();
-            if (!resultSet.first()) {//then add
+            if (!resultSet.first()) { //then add
                 addHall.setString(1, exhibit.getHall_name());
                 addHall.execute();
             }
@@ -64,7 +78,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
 
             checkMaterial.setString(1, exhibit.getMaterial_name());
             resultSet = checkMaterial.executeQuery();
-            if (!resultSet.first()) {//then add
+            if (!resultSet.first()) { //then add
                 addMaterial.setString(1, exhibit.getMaterial_name());
                 addMaterial.execute();
             }
@@ -73,7 +87,7 @@ public class ExhibitDaoImpl implements ExhibitDao {
 
             checkTechnique.setString(1, exhibit.getTechnique_name());
             resultSet = checkTechnique.executeQuery();
-            if (!resultSet.first()) {//then add
+            if (!resultSet.first()) { //then add
                 addTechnique.setString(1, exhibit.getTechnique_name());
                 addTechnique.execute();
             }
@@ -86,8 +100,14 @@ public class ExhibitDaoImpl implements ExhibitDao {
         }
     }
 
+    /**
+     * to save exhibit into database.
+     *
+     * @param exhibit to be saved
+     * @return true if successful or false if not
+     */
     @Override
-    public boolean saveExhibit(ExhibitEntity exhibit) {
+    public boolean saveExhibit(final ExhibitEntity exhibit) {
         try (PreparedStatement insertToExhibit = Database.getInstance()
                 .getConnection()
                 .prepareStatement("INSERT INTO exhibit(id_material,id_technique,id_hall,exhibit_name)" +
@@ -164,6 +184,11 @@ public class ExhibitDaoImpl implements ExhibitDao {
         }
     }
 
+    /**
+     * returns all exhibits in database.
+     *
+     * @return list of exhibits
+     */
     @Override
     public List<ExhibitEntity> readAllExhibits() {
         List<ExhibitEntity> result = new ArrayList<>();
@@ -195,6 +220,14 @@ public class ExhibitDaoImpl implements ExhibitDao {
         return result;
     }
 
+    /**
+     * returns exhibit by id
+     * or null.
+     *
+     * @param id to be found
+     * @return exhibit by id
+     * or null if not found
+     */
     @Override
     public ExhibitEntity getExhibitById(int id) {
         ExhibitEntity result;
@@ -225,6 +258,12 @@ public class ExhibitDaoImpl implements ExhibitDao {
         return result;
     }
 
+    /**
+     * updates exhibit in database with all links.
+     *
+     * @param exhibit to be updated
+     * @return number of affected rows
+     */
     @Override
     public int updateExhibit(ExhibitEntity exhibit) {
         int result = 0;
@@ -294,6 +333,12 @@ public class ExhibitDaoImpl implements ExhibitDao {
         }
     }
 
+    /**
+     * delete exhibit by id.
+     *
+     * @param id_exhibit to be deleted
+     * @return number of affected rows
+     */
     @Override
     public int deleteExhibit(int id_exhibit) {
         try (PreparedStatement deleteExhibit = Database.getInstance().getConnection().prepareStatement("DELETE FROM exhibit WHERE id_exhibit = ?");

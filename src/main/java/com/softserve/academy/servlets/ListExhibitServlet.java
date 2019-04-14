@@ -10,11 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ListExhibitServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ExhibitDao exhibitDao=new ExhibitDaoImpl();
-        req.setAttribute("exhibits",exhibitDao.readAllExhibits());
-        req.getRequestDispatcher("listExhibit.jsp").forward(req,resp);
+        ExhibitDao exhibitDao = new ExhibitDaoImpl();
+        req.setAttribute("exhibits", exhibitDao.readAllExhibits());
+        req.getRequestDispatcher("listExhibit.jsp").forward(req, resp);
     }
 }
