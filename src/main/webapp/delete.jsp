@@ -1,4 +1,3 @@
-<%@ page import="static java.lang.System.out" %>
 <%@ page import="com.softserve.academy.entity.GuideEntity" %>
 <%@ page import="java.util.List" %><%--<%@ page contentType="index/html;charset=UTF-8" language="java" %>--%>
 <html>

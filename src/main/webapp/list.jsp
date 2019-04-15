@@ -1,7 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.softserve.academy.entity.GuideEntity" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="static java.lang.System.out" %>
 
 <html>
 <head>
@@ -25,7 +24,7 @@
             if (names != null && !names.isEmpty()) {
                 out.println("<ul class=\"w3-ul\">");
                 for (GuideEntity s : names) {
-                    out.println("<li class=\"w3-hover-sand\">" +s.getId()+". "+ s.getFirstname()+" "+s.getLastname() + "</li>");
+                    out.println("<li class=\"w3-hover-sand\">" + s.getId() + ". " + s.getFirstname() + " " + s.getLastname() + "</li>");
                 }
                 out.println("</ul>");
 

@@ -1,5 +1,3 @@
-<%@ page
-        import="static java.lang.System.out" %>
 <%@ page import="com.softserve.academy.entity.ExhibitEntity" %>
 <%@ page import="java.util.List" %><%--<%@ page contentType="index/html;charset=UTF-8" language="java" %>--%>
 <html>
@@ -25,7 +23,7 @@
         }
     %>
     <%
-        if (request.getAttribute("success") != null && request.getAttribute("success").equals(0)){
+        if (request.getAttribute("success") != null && request.getAttribute("success").equals(0)) {
             out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
                     +
                     "   <span onclick=\"this.parentElement.style.display='none'\"\n" +

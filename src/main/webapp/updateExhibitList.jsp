@@ -1,6 +1,5 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="static java.lang.System.out" %>
 <%@ page import="com.softserve.academy.entity.ExhibitEntity" %>
 
 <html>
@@ -45,7 +44,7 @@
                             + "<td>" + exhibit.getTechnique_name() + "</td>"
                             + "<td>" + exhibit.getMaterial_name() + "</td>"
                             + "<td>" + exhibit.getHall_name() + "</td>");
-                    out.println("<td><button id=\""+exhibit.getId_exhibit()+"\" type=\"button\"class=\"btn btn-primary\" onclick=\"proceed(this.id);\">Update</button></td>");
+                    out.println("<td><button id=\"" + exhibit.getId_exhibit() + "\" type=\"button\"class=\"btn btn-primary\" onclick=\"proceed(this.id);\">Update</button></td>");
                 }
                 out.println("</tbody>" + "</table>");
             } else out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
