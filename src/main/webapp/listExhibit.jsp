@@ -1,6 +1,5 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="static java.lang.System.out" %>
 <%@ page import="com.softserve.academy.entity.ExhibitEntity" %>
 
 <html>

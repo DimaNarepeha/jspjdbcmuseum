@@ -320,8 +320,8 @@ public class ExhibitDaoImpl implements ExhibitDao {
             updateExhibit.setString(4, exhibitName);
             updateExhibit.setInt(5, exhibit.getId_exhibit());
             result = updateExhibit.executeUpdate();
-            updateAuthor_Exhibit.setInt(1, exhibit.getId_exhibit());
-            updateAuthor_Exhibit.setInt(2, newAuthorId);
+            updateAuthor_Exhibit.setInt(1, newAuthorId);
+            updateAuthor_Exhibit.setInt(2, exhibit.getId_exhibit());
             updateAuthor_Exhibit.execute();
             return result;
         } catch (NumberFormatException e) {

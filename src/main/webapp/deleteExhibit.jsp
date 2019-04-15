@@ -1,6 +1,5 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="static java.lang.System.out" %>
 <%@ page import="com.softserve.academy.entity.ExhibitEntity" %>
 
 <html>
@@ -65,7 +64,7 @@
         out.println("<div class=\"w3-panel w3-green w3-display-container w3-card-4 w3-round\">\n" +
                 "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
                 "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-green w3-border w3-border-green w3-hover-border-grey\">=)</span>\n" +
-                "   <h5>"+request.getAttribute("deleted")+" exhibits deleted!</h5>\n" +
+                "   <h5>" + request.getAttribute("deleted") + " exhibits deleted!</h5>\n" +
                 "</div>");
     } else if (request.getAttribute("result") != null && request.getAttribute("result").equals(0))
         out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"

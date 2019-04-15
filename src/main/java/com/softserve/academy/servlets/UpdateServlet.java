@@ -41,6 +41,12 @@ public class UpdateServlet extends HttpServlet {
             doGet(req, resp);
             return;
         }
+        if(firststr.equals("")||laststr.equals("")){
+            result =0;
+            req.setAttribute("result", result);
+            doGet(req, resp);
+            return;
+        }
         GuideEntity guideEntity = new GuideEntity(id,firststr,laststr);
         result = model.updateGuide(guideEntity);
         req.setAttribute("result", result);
