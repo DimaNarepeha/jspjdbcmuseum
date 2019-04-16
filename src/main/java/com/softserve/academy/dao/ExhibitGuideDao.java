@@ -8,4 +8,6 @@ import java.util.List;
 public interface ExhibitGuideDao {
     public List<GuideEntity> getGuidesByExhibitId();
     public List<ExhibitEntity> getExhibitsByGuideId();
+    public List<GuideEntity> getGuidesThatAreNotInThisExhibitById();
+
 }
