@@ -17,7 +17,25 @@ import java.util.List;
 public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
     @Override
     public List<GuideEntity> getGuidesByExhibitId(int id) {
-        return null;
+
+        Connection conn = Database.getInstance().getConnection();
+        List<GuideEntity> guides = new ArrayList<>();
+        try (PreparedStatement getGuides = conn.prepareStatement("SELECT g.id_guide, firstname,lastname,position_name  FROM guide g join guide_position p on  +\n" +
+                "                g.id_position=p.id_guide_position " +
+                " INNER JOIN exhibit_guide ON exhibit_guide.id_guide=g.id_guide " +
+                "WHERE exhibit_guide.id_exhibit=?")) {
+            getGuides.setInt(1, id);
+            ResultSet rs = getGuides.executeQuery();
+            while (rs.next()) {
+                GuideEntity guideEntity = new GuideEntity(rs.getInt("id_guide"), rs.getString("firstname"), rs.getString("lastname"));
+                guides.add(guideEntity);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Database fail");
+            return null;
+        }
+        return guides;
     }
 
     @Override
@@ -57,21 +75,28 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
     @Override
     public List<GuideEntity> getGuidesThatAreNotInThisExhibitById(int id) {
         Connection conn = Database.getInstance().getConnection();
-        List<GuideEntity> guides = new ArrayList<>();
         try (PreparedStatement getGuides = conn.prepareStatement("SELECT id_guide, firstname,lastname,position_name  FROM guide g join guide_position p on  +\n" +
-                "                g.id_position=p.id_guide_position where NOT g.id_guide=?")) {
-            getGuides.setInt(1, 1);
-            ResultSet rs = getGuides.executeQuery();
-            while (rs.next()) {
-                GuideEntity guideEntity = new GuideEntity(rs.getInt("id_guide"), rs.getString("firstname"), rs.getString("lastname"));
-                guides.add(guideEntity);
+                "                g.id_position=p.id_guide_position " +
+                "INNER JOIN exhibit_guide ON exhibit_guide.id_guide=g.id_guide " +
+                " where NOT g.id_exhibit=?")) {
+            List<GuideEntity> guideEntities = new GuideDaoImpl().readAllGuides();
+            List<GuideEntity> guidesByExhibitId = getGuidesByExhibitId(id);
+            Iterator iterator = guidesByExhibitId.iterator();
+            while (iterator.hasNext()) {
+                GuideEntity g = (GuideEntity) iterator.next();
+                Iterator iterator1 = guideEntities.iterator();
+                while (iterator1.hasNext()) {
+                    GuideEntity g2 = (GuideEntity) iterator1.next();
+                    if (g.getId() == g2.getId()) {
+                        iterator1.remove();
+                    }
+                }
             }
-            rs.close();
+            return guideEntities;
         } catch (SQLException e) {
             System.out.println("Database fail");
             return null;
         }
-        return guides;
     }
 
     @Override
@@ -86,10 +111,10 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
              PreparedStatement deleteFromGuideExhibit = Database.getInstance() //between guide and exhibit
                      .getConnection()
                      .prepareStatement("DELETE FROM exhibit_guide WHERE id_guide = ? AND id_exhibit=? ;");
-        PreparedStatement addGuideExhibit = Database.getInstance() //between guide and exhibit
+             PreparedStatement addGuideExhibit = Database.getInstance() //between guide and exhibit
                      .getConnection()
-                .prepareStatement("INSERT INTO exhibit_guide(id_guide,id_exhibit)" +
-                        "VALUES (?,?)")) {
+                     .prepareStatement("INSERT INTO exhibit_guide(id_guide,id_exhibit)" +
+                             "VALUES (?,?)")) {
             selectAllConnections.setInt(1, exhibitId);
             ResultSet resultSet = selectAllConnections.executeQuery();
             while (resultSet.next()) {
@@ -97,26 +122,27 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
             }
 
             Iterator iterator = guidesThatAlreadyPresent.iterator();
-            boolean isIdentical=true;
-            while (iterator.hasNext()) {//check if identical
-                if (!guidesToExhibit.contains(iterator.next())) {
-                    isIdentical=false;
-                    break;
-                }
-            }
-            if(isIdentical){//if identical then quit
-                return result;
-            }
+//            boolean isIdentical = true;
+//            while (iterator.hasNext()) {//check if identical
+//                if (!guidesToExhibit.contains(iterator.next())) {
+//                    isIdentical = false;
+//                    break;
+//                }
+//            }
+//            if (isIdentical) {//if identical then quit
+//                System.out.println("NOOOO");
+//                return result;
+//            }
             iterator = guidesThatAlreadyPresent.iterator();
             while (iterator.hasNext()) {
                 deleteFromGuideExhibit.setInt(1, (Integer) iterator.next());
-                deleteFromGuideExhibit.setInt(2,exhibitId);
+                deleteFromGuideExhibit.setInt(2, exhibitId);
                 deleteFromGuideExhibit.execute();
             }
             iterator = guidesToExhibit.iterator();
             while (iterator.hasNext()) {
                 addGuideExhibit.setInt(1, (Integer) iterator.next());
-                addGuideExhibit.setInt(2,exhibitId);
+                addGuideExhibit.setInt(2, exhibitId);
                 addGuideExhibit.execute();
             }
             return 1;

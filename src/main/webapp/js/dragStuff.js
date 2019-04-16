@@ -8,3 +8,4 @@ $( function() {
       connectWith: ".connectedSortable"
     }).disableSelection();
   } );
+

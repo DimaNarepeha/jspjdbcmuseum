@@ -21,20 +21,33 @@ public class DragnDropUpdate extends HttpServlet {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
         req.setAttribute("exhibits", exhibitDao.readAllExhibits());
         System.out.println("IN GET");
-        req.getRequestDispatcher("ListExhibitWithButtons.jsp").forward(req,resp);
+        req.getRequestDispatcher("ListExhibitWithButtons.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitGuideDao exhibitGuideDao = new ExhibitGuideDaoImpl();
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
-        int id =Integer.parseInt(req.getParameter("id"));
-        req.setAttribute("exhibit", exhibitDao.getExhibitById(id));
-        req.setAttribute("currentGuides",exhibitGuideDao.getGuidesByExhibitId(id));
-        req.setAttribute("guidesInDatabase",exhibitGuideDao.getGuidesThatAreNotInThisExhibitById(id));
+        int id = Integer.parseInt(req.getParameter("id"));
+
         if (req.getParameter("idsToUpdate") != null) {
-            HashSet<Integer> ids = (HashSet<Integer>) Arrays.asList(req.getParameter("idsToUpdate").split(" ")).stream().map(Integer::parseInt).collect(Collectors.toList());
+            List<String> stringList = Arrays.asList(req.getParameter("idsToUpdate").split(" "));
+            HashSet<Integer> ids = new HashSet<>();
+            for (int i = 0; i < stringList.size(); i++) {
+                try {
+                    ids.add(Integer.valueOf(stringList.get(i)));
+                } catch (NumberFormatException e) {
+
+                }
+            }
+            System.out.println(ids);
+            exhibitGuideDao.reconnectRelations(ids, id);
+            req.setAttribute("success", 1);
         }
-        req.getRequestDispatcher("dragndropaddguideexhibit.jsp").forward(req,resp);
+        req.setAttribute("idOldExhibit", id);
+        req.setAttribute("exhibit", exhibitDao.getExhibitById(id));
+        req.setAttribute("currentGuides", exhibitGuideDao.getGuidesByExhibitId(id));
+        req.setAttribute("guidesInDatabase", exhibitGuideDao.getGuidesThatAreNotInThisExhibitById(id));
+        req.getRequestDispatcher("dragndropaddguideexhibit.jsp").forward(req, resp);
     }
 }

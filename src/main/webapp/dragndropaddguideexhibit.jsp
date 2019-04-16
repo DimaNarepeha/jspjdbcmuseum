@@ -9,6 +9,7 @@
     <title>Add new user</title>
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/jquery-ui-git.js"></script>
+    <script src="js/buttonToUpdateRelations.js"></script>
 
     <script src="js/dragStuff.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
@@ -22,7 +23,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 
-<body class="w3-light-grey">
+<body class="w3-light-grey" id="<%out.println(request.getAttribute("idOldExhibit"));%>">
 <div class="w3-container w3-blue-grey w3-opacity w3-right-align">
     <h1>Super app!</h1>
 </div>
@@ -33,7 +34,7 @@
             out.println("<div class=\"w3-panel w3-green w3-display-container w3-card-4 w3-round\">\n" +
                     "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
                     "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-green w3-border w3-border-green w3-hover-border-grey\">=)</span>\n" +
-                    "   <h5>Exhibit '" + request.getParameter("exhibitName") + "' was added!</h5>\n" +
+                    "   <h5> Successfully updated!</h5>\n" +
                     "</div>");
         }
     %>
@@ -80,32 +81,42 @@
                             + "<td>" + exhibit.getHall_name() + "</td>");
 
                     out.println("</tbody>" + "</table>");
-                    out.println("<table class=\"table\">\n" +
+                    out.println("<table id=\"in\"   class=\"table\">\n" +
                             "  <thead>\n" +
-                            "    <tr>\n" +
-                            "      <th scope=\"col\">Guides For This Exhibit</th>\n" +
-                            "    </tr>\n" +
+                            "    <tr><th scope=\"col\">Guides For This Exhibit</th></tr>\n" +
                             "  </thead>");
-                    out.println("<tbody class=\"connectedSortable\">");
-                    for(GuideEntity entity:currentGuides){
-                        out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
+
+                    out.println("<tbody  class=\"connectedSortable\">");
+                    if(currentGuides!=null&&!currentGuides.isEmpty()){
+                        for(GuideEntity entity:currentGuides){
+                            out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
+                            out.println("<th scope=\"row\">"
+                                    + "</th><td>" + entity.getFirstname() + " "
+                                    + entity.getLastname() + "</td>");
+                        }
+                    }else{
+                        out.println("<tr class=\"w3-hover-sand\">");
                         out.println("<th scope=\"row\">"
-                                + "</th><td>" + entity.getFirstname() + " "
-                                + entity.getLastname() + "</td>");
+                                + "</th><td>Empty!</td>");
                     }
-                    out.println("<table class=\"table\">\n" +
+                    out.println("</tbody>" + "</table>");
+                    out.println("<table  class=\"table\">\n" +
                             "  <thead>\n" +
                             "    <tr>\n" +
                             "      <th scope=\"col\">All other Guides</th>\n" +
                             "    </tr>\n" +
                             "  </thead>");
-                    out.println("<tbody class=\"connectedSortable\">");
+                    out.println("<tbody class=\"connectedSortable out\">");
+                    if(!guidesInDatabase.isEmpty()){
                     for(GuideEntity entity:guidesInDatabase){
                         out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
                         out.println("<th scope=\"row\">"
                                 + "</th><td>" + entity.getFirstname() + " "
                                 + entity.getLastname() + "</td>");
                     }
+                }else{
+                    out.println("Empty");
+                }
                 } else out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
                         +
                         "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
@@ -115,27 +126,7 @@
             %>
             </tbody>
         </table>
-        <div>
-            <%
-                List<ExhibitEntity> names = (List<ExhibitEntity>) request.getAttribute("exhibits");
-                if (names != null && !names.isEmpty()) {
-
-
-                } else {
-                    out
-                            .
-                                    println
-                                            (
-                                                    "<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
-                                                            +
-                                                            "<h5>There are no exhibits yet!</h5>\n"
-                                                            +
-                                                            "</div>"
-                                            )
-                    ;
-                }
-            %>
-        </div>
+        <button type="button"class="btn btn-primary" onclick="proceed();">Update</button>
 
 
     </div>
