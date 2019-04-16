@@ -11,7 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AddExhibitServlet extends HttpServlet {
-
+    /**
+     * this method returns the start page
+     * for addExhibit.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
@@ -19,6 +27,16 @@ public class AddExhibitServlet extends HttpServlet {
         req.getRequestDispatcher("addExhibit.jsp").forward(req, resp);
     }
 
+    /**
+     * when the page is already loaded
+     * some additional data will be transferred into
+     * this method and will be saved in a database.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitEntity exhibitEntity = new ExhibitEntity(0);

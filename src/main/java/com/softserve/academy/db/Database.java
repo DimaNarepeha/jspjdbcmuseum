@@ -6,11 +6,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * This class represents Database
+ * and it implements singleton pattern.
+ *
+ * @author Dmytro Narepekha
+ */
 public class Database {
-    Connection connectionToDatabase;
+    /**
+     * connection to database.
+     */
+    private Connection connectionToDatabase;
 
 
-    static Database instance = null;
+    private static Database instance = null;
 
     private Database() {
         String url = "jdbc:mysql://sql2.freemysqlhosting.net:3306/sql2287510?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
@@ -21,22 +30,20 @@ public class Database {
         } catch (SQLException | CJCommunicationsException e) {
             e.printStackTrace();
         }
-
     }
 
     public static Database getInstance() {
-        if (instance == null)
+        if (instance == null) {
             synchronized (Database.class) {
-                if (instance == null)
+                if (instance == null) {
                     instance = new Database();
-
+                }
             }
+        }
         return instance;
     }
 
     public Connection getConnection() {
         return connectionToDatabase;
     }
-
-
 }

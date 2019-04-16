@@ -8,10 +8,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DeleteExhibitServlet extends HttpServlet {
+    /**
+     * the page is firstly loaded by this method.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
@@ -19,6 +25,16 @@ public class DeleteExhibitServlet extends HttpServlet {
         req.getRequestDispatcher("deleteExhibit.jsp").forward(req, resp);
     }
 
+    /**
+     * when the page is loaded
+     * user will select exhibits to delete
+     * and this method wil do the deletion from database through dao.
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
