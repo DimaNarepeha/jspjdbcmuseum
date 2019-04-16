@@ -8,6 +8,15 @@
 <head>
     <title>Exhibit-Guide list</title>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css"
+          href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 
 <body class="w3-light-grey">
@@ -28,9 +37,9 @@
                 out.println("<ul class=\"w3-ul\">");
                 for (String s : names.keySet()) {
                     out.println("<ul class=\" w3-red \">" +"Exhibit: "+s+ "</ul>");
-                    out.println("<li class=\"w3-hover-sand\">"+"Responsible:");
+                    out.println("<li class=\"w3-hover-khaki w3-animate-left\">"+"Responsible:");
                         for(String g : names.get(s)){
-                            out.print("  "+g+ " ");
+                            out.print("  "+g+ "; ");
                         }
                     out.println( "</li>");
 
