@@ -48,7 +48,7 @@
                     "</div>");
         }
     %>
-    <div class="w3-card-4">
+    <div class="w3-card-4 container">
         <div class="w3-container w3-center w3-green">
             <h2>Add exhibit</h2>
         </div>
@@ -80,8 +80,8 @@
                             + "<td>" + exhibit.getMaterial_name() + "</td>"
                             + "<td>" + exhibit.getHall_name() + "</td>");
 
-                    out.println("</tbody>" + "</table>");
-                    out.println("<table id=\"in\"   class=\"table\">\n" +
+                    out.println("</tbody>" + "</table><br><br>");
+                    out.println("<table id=\"in\" class=\"table\">\n" +
                             "  <thead>\n" +
                             "    <tr><th scope=\"col\">Guides For This Exhibit</th></tr>\n" +
                             "  </thead>");
@@ -89,7 +89,7 @@
                     out.println("<tbody  class=\"connectedSortable\">");
                     if(currentGuides!=null&&!currentGuides.isEmpty()){
                         for(GuideEntity entity:currentGuides){
-                            out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
+                            out.println("<tr class=\"w3-hover-sand table-success\" id="+entity.getId()+">");
                             out.println("<th scope=\"row\">"
                                     + "</th><td>" + entity.getFirstname() + " "
                                     + entity.getLastname() + "</td>");
@@ -100,7 +100,7 @@
                                 + "</th><td>Empty!</td>");
                     }
                     out.println("</tbody>" + "</table>");
-                    out.println("<table  class=\"table\">\n" +
+                    out.println("<table  class=\"table \">\n" +
                             "  <thead>\n" +
                             "    <tr>\n" +
                             "      <th scope=\"col\">All other Guides</th>\n" +
@@ -109,7 +109,7 @@
                     out.println("<tbody class=\"connectedSortable out\">");
                     if(!guidesInDatabase.isEmpty()){
                     for(GuideEntity entity:guidesInDatabase){
-                        out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
+                        out.println("<tr class=\"w3-hover-sand table-danger\" id="+entity.getId()+">");
                         out.println("<th scope=\"row\">"
                                 + "</th><td>" + entity.getFirstname() + " "
                                 + entity.getLastname() + "</td>");
@@ -124,12 +124,17 @@
                         "   <h5>There are no exhibits yet!</h5>\n" +
                         "</div>");
             %>
+
+
             </tbody>
+
         </table>
-        <button type="button"class="btn btn-primary" onclick="proceed();">Update</button>
 
 
-    </div>
+
+        <div class="col text-center">
+            <button type="button"class="btn btn-primary btn-lg w3-center " onclick="proceed();">Update</button>
+        </div>
 
 </div>
 
