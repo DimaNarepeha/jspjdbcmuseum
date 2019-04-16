@@ -5,6 +5,7 @@ import com.softserve.academy.db.Database;
 import com.softserve.academy.entity.ExhibitEntity;
 import com.softserve.academy.entity.GuideEntity;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,5 +49,28 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
             return result;
         }
         return result;
+    }
+
+    @Override
+    public List<GuideEntity> getGuidesThatAreNotInThisExhibitById() {
+        Connection conn = Database.getInstance().getConnection();
+        List<GuideEntity> guides = new ArrayList<>();
+        try(PreparedStatement getGuides = conn.prepareStatement("SELECT id_guide, firstname,lastname,position_name  FROM guide g join guide_position p on  +\n" +
+                "                g.id_position=p.id_guide_position group by id_guide")) {
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+
+                GuideEntity guideEntity = new GuideEntity(rs.getInt("id_guide"),rs.getString("firstname"), rs.getString("lastname"));
+                guides.add(guideEntity);
+
+            }
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Database fail");
+            return null;
+        }
+        return guides;
     }
 }
