@@ -103,6 +103,19 @@
         <url-pattern>/update</url-pattern>
     </servlet-mapping>
 
+    <!-- update exhibit guide relation servlet -->
+    <servlet>
+        <servlet-name>updateRelation</servlet-name>
+        <servlet-class>com.softserve.academy.servlets.DragnDropUpdate</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>updateRelation</servlet-name>
+        <url-pattern>/updateRelation</url-pattern>
+    </servlet-mapping>
+
+
+
     <!-- update guide servlet -->
     <servlet>
         <servlet-name>find</servlet-name>
@@ -113,4 +126,5 @@
         <servlet-name>find</servlet-name>
         <url-pattern>/find</url-pattern>
     </servlet-mapping>
+
 </web-app>
