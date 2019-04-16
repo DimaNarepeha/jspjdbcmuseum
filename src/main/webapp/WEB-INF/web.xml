@@ -102,4 +102,15 @@
         <servlet-name>update</servlet-name>
         <url-pattern>/update</url-pattern>
     </servlet-mapping>
+
+    <!-- update guide servlet -->
+    <servlet>
+        <servlet-name>find</servlet-name>
+        <servlet-class>com.softserve.academy.servlets.ListRelationsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>find</servlet-name>
+        <url-pattern>/find</url-pattern>
+    </servlet-mapping>
 </web-app>
