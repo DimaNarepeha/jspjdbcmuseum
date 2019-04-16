@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
@@ -31,7 +33,7 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
                         "INNER JOIN author ON author.id_author=author_exhibit.id_author\n" +
                         "INNER JOIN exhibit_guide ON exhibit_guide.id_exhibit=exhibit.id_exhibit " +
                         "WHERE exhibit_guide.id_guide = ?;")) {
-            selectFromExhibit.setInt(1,id);
+            selectFromExhibit.setInt(1, id);
             ResultSet resultSet = selectFromExhibit.executeQuery();
 
             while (resultSet.next()) {
@@ -56,12 +58,12 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
     public List<GuideEntity> getGuidesThatAreNotInThisExhibitById(int id) {
         Connection conn = Database.getInstance().getConnection();
         List<GuideEntity> guides = new ArrayList<>();
-        try(PreparedStatement getGuides = conn.prepareStatement("SELECT id_guide, firstname,lastname,position_name  FROM guide g join guide_position p on  +\n" +
+        try (PreparedStatement getGuides = conn.prepareStatement("SELECT id_guide, firstname,lastname,position_name  FROM guide g join guide_position p on  +\n" +
                 "                g.id_position=p.id_guide_position where NOT g.id_guide=?")) {
-            getGuides.setInt(1,1);
+            getGuides.setInt(1, 1);
             ResultSet rs = getGuides.executeQuery();
             while (rs.next()) {
-                GuideEntity guideEntity = new GuideEntity(rs.getInt("id_guide"),rs.getString("firstname"), rs.getString("lastname"));
+                GuideEntity guideEntity = new GuideEntity(rs.getInt("id_guide"), rs.getString("firstname"), rs.getString("lastname"));
                 guides.add(guideEntity);
             }
             rs.close();
@@ -70,5 +72,57 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
             return null;
         }
         return guides;
+    }
+
+    @Override
+    public int reconnectRelations(HashSet<Integer> guidesToExhibit, int exhibitId) {
+        int result = 0; //if null then nothing was changed
+        HashSet<Integer> guidesThatAlreadyPresent = new HashSet<>();
+        try (PreparedStatement selectAllConnections = Database.getInstance() //between guide and exhibit
+                .getConnection()
+                .prepareStatement("SELECT exhibit_guide.id_guide FROM exhibit\n" +
+                        "INNER JOIN exhibit_guide ON exhibit_guide.id_exhibit=exhibit.id_exhibit " +
+                        "WHERE exhibit_guide.id_exhibit = ?;");
+             PreparedStatement deleteFromGuideExhibit = Database.getInstance() //between guide and exhibit
+                     .getConnection()
+                     .prepareStatement("DELETE FROM exhibit_guide WHERE id_guide = ? AND id_exhibit=? ;");
+        PreparedStatement addGuideExhibit = Database.getInstance() //between guide and exhibit
+                     .getConnection()
+                .prepareStatement("INSERT INTO exhibit_guide(id_guide,id_exhibit)" +
+                        "VALUES (?,?)")) {
+            selectAllConnections.setInt(1, exhibitId);
+            ResultSet resultSet = selectAllConnections.executeQuery();
+            while (resultSet.next()) {
+                guidesThatAlreadyPresent.add(resultSet.getInt(1));
+            }
+
+            Iterator iterator = guidesThatAlreadyPresent.iterator();
+            boolean isIdentical=true;
+            while (iterator.hasNext()) {//check if identical
+                if (!guidesToExhibit.contains(iterator.next())) {
+                    isIdentical=false;
+                    break;
+                }
+            }
+            if(isIdentical){//if identical then quit
+                return result;
+            }
+            iterator = guidesThatAlreadyPresent.iterator();
+            while (iterator.hasNext()) {
+                deleteFromGuideExhibit.setInt(1, (Integer) iterator.next());
+                deleteFromGuideExhibit.setInt(2,exhibitId);
+                deleteFromGuideExhibit.execute();
+            }
+            iterator = guidesToExhibit.iterator();
+            while (iterator.hasNext()) {
+                addGuideExhibit.setInt(1, (Integer) iterator.next());
+                addGuideExhibit.setInt(2,exhibitId);
+                addGuideExhibit.execute();
+            }
+            return 1;
+        } catch (SQLException e) {
+            System.out.println("Database fail");
+            return result;
+        }
     }
 }
