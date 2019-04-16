@@ -44,7 +44,7 @@
                             + "<td>" + exhibit.getTechnique_name() + "</td>"
                             + "<td>" + exhibit.getMaterial_name() + "</td>"
                             + "<td>" + exhibit.getHall_name() + "</td>");
-                    out.println("<td><button id=\"" + exhibit.getId_exhibit() + "\" type=\"button\"class=\"btn btn-primary\" onclick=\"proceed(this.id);\">Add authors</button></td>");
+                    out.println("<td><button id=\"" + exhibit.getId_exhibit() + "\" type=\"button\"class=\"btn btn-primary\" onclick=\"proceed(this.id);\">Add guides</button></td>");
                 }
                 out.println("</tbody>" + "</table>");
 
