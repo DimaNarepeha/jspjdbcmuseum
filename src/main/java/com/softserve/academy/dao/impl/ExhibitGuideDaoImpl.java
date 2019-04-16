@@ -14,12 +14,12 @@ import java.util.List;
 
 public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
     @Override
-    public List<GuideEntity> getGuidesByExhibitId() {
+    public List<GuideEntity> getGuidesByExhibitId(int id) {
         return null;
     }
 
     @Override
-    public List<ExhibitEntity> getExhibitsByGuideId() {
+    public List<ExhibitEntity> getExhibitsByGuideId(int id) {
         List<ExhibitEntity> result = new ArrayList<>();
         try (PreparedStatement selectFromExhibit = Database.getInstance()
                 .getConnection()
@@ -31,6 +31,7 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
                         "INNER JOIN author ON author.id_author=author_exhibit.id_author\n" +
                         "INNER JOIN exhibit_guide ON exhibit_guide.id_exhibit=exhibit.id_exhibit " +
                         "WHERE exhibit_guide.id_guide = ?;")) {
+            selectFromExhibit.setInt(1,id);
             ResultSet resultSet = selectFromExhibit.executeQuery();
 
             while (resultSet.next()) {
@@ -52,19 +53,16 @@ public class ExhibitGuideDaoImpl implements ExhibitGuideDao {
     }
 
     @Override
-    public List<GuideEntity> getGuidesThatAreNotInThisExhibitById() {
+    public List<GuideEntity> getGuidesThatAreNotInThisExhibitById(int id) {
         Connection conn = Database.getInstance().getConnection();
         List<GuideEntity> guides = new ArrayList<>();
         try(PreparedStatement getGuides = conn.prepareStatement("SELECT id_guide, firstname,lastname,position_name  FROM guide g join guide_position p on  +\n" +
-                "                g.id_position=p.id_guide_position group by id_guide")) {
-
-            ResultSet rs = pstmt.executeQuery();
-
+                "                g.id_position=p.id_guide_position where NOT g.id_guide=?")) {
+            getGuides.setInt(1,1);
+            ResultSet rs = getGuides.executeQuery();
             while (rs.next()) {
-
                 GuideEntity guideEntity = new GuideEntity(rs.getInt("id_guide"),rs.getString("firstname"), rs.getString("lastname"));
                 guides.add(guideEntity);
-
             }
             rs.close();
         } catch (SQLException e) {
