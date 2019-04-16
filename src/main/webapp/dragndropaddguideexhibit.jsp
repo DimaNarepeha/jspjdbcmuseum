@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.softserve.academy.entity.ExhibitEntity" %>
-<%@ page import="java.util.List" %><%--<%@ page contentType="index/html;charset=UTF-8" language="java" %>--%>
+<%@ page import="java.util.List" %>
+<%@ page
+        import="com.softserve.academy.entity.GuideEntity" %><%--<%@ page contentType="index/html;charset=UTF-8" language="java" %>--%>
 <html>
 <head>
     <title>Add new user</title>
@@ -50,49 +52,88 @@
             <h2>Add exhibit</h2>
         </div>
         <table class="table table-bordered pagin-table">
-            <thead>
-            <tr>
-                <th scope=\"col\">Exhibit</th>
-                <th scope=\"col\">Author</th>
-                <th scope=\"col\">Technique</th>
-                <th scope=\"col\">Material</th>
-                <th scope=\"col\">Hall</th>
-            </tr>
-            </thead>
+
             <tbody class="connectedSortable">
-            <c:forEach items="${exhibit}" var="name">
-                <tr>
-                    <td>${exhibit.getExhibit_name()}</td>
-                    <td>${exhibit.getFirstName()+" "+exhibit.getLastName()}</td>
-                    <td>${exhibit.getTechnique_name()}</td>
-                    <td>${exhibit.exhibit.getMaterial_name()}</td>
-                    <td>${exhibit.getHall_name()}</td>
-                </tr>
-            </c:forEach>
+            <%
+                ExhibitEntity exhibit = (ExhibitEntity) request.getAttribute("exhibit");
+                List<GuideEntity> currentGuides = (List<GuideEntity>) request.getAttribute("currentGuides");
+                List<GuideEntity> guidesInDatabase = (List<GuideEntity>) request.getAttribute("guidesInDatabase");
+                if (exhibit != null) {
+                    out.println("<table class=\"table connectedSortable\">\n <thead>\n" +
+                            "            <tr>\n" +
+                            "                <th scope=\\\"col\\\">Exhibit</th>\n" +
+                            "                <th scope=\\\"col\\\">Author</th>\n" +
+                            "                <th scope=\\\"col\\\">Technique</th>\n" +
+                            "                <th scope=\\\"col\\\">Material</th>\n" +
+                            "                <th scope=\\\"col\\\">Hall</th>\n" +
+                            "            </tr>\n" +
+                            "            </thead>");
+                    out.println("<tbody class=\"connectedSortable\">");
+
+                    out.println("<tr class=\"w3-hover-sand\">");
+                    out.println("<th scope=\"row\">"
+                            + exhibit.getExhibit_name()
+                            + "</th><td>" + exhibit.getFirstName() + " "
+                            + exhibit.getLastName() + "</td>"
+                            + "<td>" + exhibit.getTechnique_name() + "</td>"
+                            + "<td>" + exhibit.getMaterial_name() + "</td>"
+                            + "<td>" + exhibit.getHall_name() + "</td>");
+
+                    out.println("</tbody>" + "</table>");
+                    out.println("<table class=\"table\">\n" +
+                            "  <thead>\n" +
+                            "    <tr>\n" +
+                            "      <th scope=\"col\">Guides For This Exhibit</th>\n" +
+                            "    </tr>\n" +
+                            "  </thead>");
+                    out.println("<tbody class=\"connectedSortable\">");
+                    for(GuideEntity entity:currentGuides){
+                        out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
+                        out.println("<th scope=\"row\">"
+                                + "</th><td>" + entity.getFirstname() + " "
+                                + entity.getLastname() + "</td>");
+                    }
+                    out.println("<table class=\"table\">\n" +
+                            "  <thead>\n" +
+                            "    <tr>\n" +
+                            "      <th scope=\"col\">All other Guides</th>\n" +
+                            "    </tr>\n" +
+                            "  </thead>");
+                    out.println("<tbody class=\"connectedSortable\">");
+                    for(GuideEntity entity:guidesInDatabase){
+                        out.println("<tr class=\"w3-hover-sand\" id="+entity.getId()+">");
+                        out.println("<th scope=\"row\">"
+                                + "</th><td>" + entity.getFirstname() + " "
+                                + entity.getLastname() + "</td>");
+                    }
+                } else out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
+                        +
+                        "   <span onclick=\"this.parentElement.style.display='none'\"\n" +
+                        "   class=\"w3-button w3-margin-right w3-display-right w3-round-large w3-hover-red w3-border w3-border-red w3-hover-border-grey\">=)</span>\n" +
+                        "   <h5>There are no exhibits yet!</h5>\n" +
+                        "</div>");
+            %>
             </tbody>
         </table>
         <div>
             <%
                 List<ExhibitEntity> names = (List<ExhibitEntity>) request.getAttribute("exhibits");
-
                 if (names != null && !names.isEmpty()) {
 
 
+                } else {
+                    out
+                            .
+                                    println
+                                            (
+                                                    "<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
+                                                            +
+                                                            "<h5>There are no exhibits yet!</h5>\n"
+                                                            +
+                                                            "</div>"
+                                            )
+                    ;
                 }
-                out.println("</tbody>" + "</table>");
-                }
-                else
-                out
-                .
-                println
-                (
-                "<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
-                +
-                "<h5>There are no exhibits yet!</h5>\n"
-                +
-                "</div>"
-                )
-                ;
             %>
         </div>
 

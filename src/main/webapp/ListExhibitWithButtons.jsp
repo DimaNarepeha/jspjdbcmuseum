@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Exhibits list</title>
-    <script src="onClickExhibits.js"></script>
+    <script src="js/onClickExhibits.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
@@ -44,9 +44,10 @@
                             + "<td>" + exhibit.getTechnique_name() + "</td>"
                             + "<td>" + exhibit.getMaterial_name() + "</td>"
                             + "<td>" + exhibit.getHall_name() + "</td>");
-
+                    out.println("<td><button id=\"" + exhibit.getId_exhibit() + "\" type=\"button\"class=\"btn btn-primary\" onclick=\"proceed(this.id);\">Add authors</button></td>");
                 }
                 out.println("</tbody>" + "</table>");
+
             } else out.println("<div class=\"w3-panel w3-red w3-display-container w3-card-4 w3-round\">\n"
                     +
                     "   <span onclick=\"this.parentElement.style.display='none'\"\n" +

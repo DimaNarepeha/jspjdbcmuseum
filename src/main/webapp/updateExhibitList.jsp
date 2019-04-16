@@ -40,7 +40,7 @@
                     out.println("<th scope=\"row\">"
                             + exhibit.getExhibit_name()
                             + "</th><td>" + exhibit.getFirstName() + " "
-                            + exh   ibit.getLastName() + "</td>"
+                            + exhibit.getLastName() + "</td>"
                             + "<td>" + exhibit.getTechnique_name() + "</td>"
                             + "<td>" + exhibit.getMaterial_name() + "</td>"
                             + "<td>" + exhibit.getHall_name() + "</td>");

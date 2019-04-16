@@ -20,17 +20,21 @@ public class DragnDropUpdate extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitDao exhibitDao = new ExhibitDaoImpl();
         req.setAttribute("exhibits", exhibitDao.readAllExhibits());
-        req.getRequestDispatcher("ListExhibitWithButtons.jsp");
+        System.out.println("IN GET");
+        req.getRequestDispatcher("ListExhibitWithButtons.jsp").forward(req,resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExhibitGuideDao exhibitGuideDao = new ExhibitGuideDaoImpl();
-        req.setAttribute("exhibit", exhibitGuideDao.getExhibitsByGuideId(Integer.parseInt(req.getParameter("idExhibit"))));
-        req.getRequestDispatcher("addExhibit.jsp").forward(req, resp);
+        ExhibitDao exhibitDao = new ExhibitDaoImpl();
+        int id =Integer.parseInt(req.getParameter("id"));
+        req.setAttribute("exhibit", exhibitDao.getExhibitById(id));
+        req.setAttribute("currentGuides",exhibitGuideDao.getGuidesByExhibitId(id));
+        req.setAttribute("guidesInDatabase",exhibitGuideDao.getGuidesThatAreNotInThisExhibitById(id));
         if (req.getParameter("idsToUpdate") != null) {
             HashSet<Integer> ids = (HashSet<Integer>) Arrays.asList(req.getParameter("idsToUpdate").split(" ")).stream().map(Integer::parseInt).collect(Collectors.toList());
         }
-        req.getRequestDispatcher("dragndropaddguideexhibit.jsp");
+        req.getRequestDispatcher("dragndropaddguideexhibit.jsp").forward(req,resp);
     }
 }
