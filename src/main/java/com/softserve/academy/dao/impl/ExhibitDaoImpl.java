@@ -342,9 +342,12 @@ public class ExhibitDaoImpl implements ExhibitDao {
     @Override
     public int deleteExhibit(int id_exhibit) {
         try (PreparedStatement deleteExhibit = Database.getInstance().getConnection().prepareStatement("DELETE FROM exhibit WHERE id_exhibit = ?");
-             PreparedStatement delete_author_exhibit = Database.getInstance().getConnection().prepareStatement("DELETE FROM author_exhibit WHERE id_exhibit = ?")) {
+             PreparedStatement delete_author_exhibit = Database.getInstance().getConnection().prepareStatement("DELETE FROM author_exhibit WHERE id_exhibit = ?");
+             PreparedStatement delete_exhibit_guide=Database.getInstance().getConnection().prepareStatement("DELETE FROM exhibit_guide WHERE id_exhibit=?;") ) {
             deleteExhibit.setInt(1, id_exhibit);
             delete_author_exhibit.setInt(1, id_exhibit);
+            delete_author_exhibit.execute();
+            delete_exhibit_guide.setInt(1,id_exhibit);
             delete_author_exhibit.execute();
             int rowsAffected = deleteExhibit.executeUpdate();
             return rowsAffected;
