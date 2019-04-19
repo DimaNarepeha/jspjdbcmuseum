@@ -1,7 +1,6 @@
 package ua.home;
 
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -10,8 +9,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-/*import ua.home.repository.TestRepository;
-import ua.home.service.GameService;*/
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import ua.home.repository.TestRepository;
+
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -32,24 +29,25 @@ import java.util.Properties;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan
-@EnableJpaRepositories(basePackageClasses = TestRepository.class)
 public class Config extends WebMvcConfigurerAdapter {
 
-   /* @Bean
-    public GameService gameService() {
-        return new GameService();
-    }*/
-   @Override
-   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-       super.addResourceHandlers(registry);
-       registry.addResourceHandler("/resources/**")
-               .addResourceLocations("/views/resources/");
-   }
-    public void configureDefaultServerletHandling(DefaultServletHandlerConfigurer configurer){
+    /* @Bean
+     public GameService gameService() {
+         return new GameService();
+     }*/
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        super.addResourceHandlers(registry);
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/views/resources/");
+    }
+
+    public void configureDefaultServerletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+
     @Bean
-    public ViewResolver getViewResolver(){
+    public ViewResolver getViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setViewClass(JstlView.class);
         resolver.setPrefix("views/");
@@ -66,7 +64,7 @@ public class Config extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
@@ -88,15 +86,16 @@ public class Config extends WebMvcConfigurerAdapter {
     }*/
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.H2).build();
     }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("ua.home.controller","ua.home.repository","ua.home.entity","ua.home.service");
+        em.setPackagesToScan("ua.home.controller", "ua.home.repository", "ua.home.entity", "ua.home.service");
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);

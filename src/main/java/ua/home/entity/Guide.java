@@ -1,6 +1,6 @@
 package ua.home.entity;
 
-import javax.annotation.sql.DataSourceDefinition;
+
 import javax.persistence.*;
 
 @Entity
